@@ -1,0 +1,22 @@
+{
+  "_comment": "tiến hành định dạng chuỗi ở các file này thông qua formatted message để lấy",
+  "email": "Địa chỉ Email",
+  "password": "Mật khẩu",
+  "repeatPassword": "Xác nhận lại mật khẩu",
+  "name": "Họ và tên",
+  "gender": "Giới tính",
+  "region": "Quốc gia",
+  "state": "Tiểu bang", 
+  "rememberMe": "Lưu thông tin đăng nhập",
+  "emailRequire": "Invalid email address.",
+  "emailInvalid": "Invalid email address.",
+  "passwordRequire": "Vui lòng nhập mật khẩu",
+  "matchPasswordInvalid": "Xác nhận mật khẩu không khớp",
+  "minPasswordInvalid": "Password must be at least 6 characters long.",
+  "nameRequire": "Họ và tên không được để trống",
+  "genderRequire": "Giới tính không được để trống",
+  "regionRequire": "Quốc gia không được để trống",
+  "stateRequire": "Thành phố không được để trống",
+  "login": "Đăng nhập",
+  "register": "Đăng ký ngay"
+}

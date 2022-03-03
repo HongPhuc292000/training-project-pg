@@ -1,0 +1,56 @@
+@import './variables.scss';
+
+.sidebar{
+    position: fixed;
+    left: 0;
+    background-color: $pimary-color;
+    height: calc(100vh - #{$header-height});
+    margin-bottom: 0;
+    padding-top: 0.625rem;
+    padding-bottom: 1.25rem;
+    padding-left: 0;
+    .sidebar-item{
+        a{
+            text-decoration: none;
+            color: $text-white;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+        
+        // &:not(:last-child) > a{
+        //     border-bottom: 1px solid #1b1b38;
+        // }
+    }
+    & > :not(:last-child){
+        border-bottom: 1px solid #1b1b38;
+    }
+}
+
+.sidebar-item{
+    &:hover{
+        a{
+            color: $second-color;
+        }
+    }
+
+    &__title{
+        display: flex;
+        align-items: center;
+        span{
+            margin-left: 0.5rem;
+        }
+    }
+
+    &__show{
+        display: flex;
+        align-items: center;
+        svg{
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+    }
+}

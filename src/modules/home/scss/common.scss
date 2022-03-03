@@ -1,0 +1,36 @@
+@import './variables.scss';
+
+:root{
+    color: $text-white;
+}
+
+.main-wrap{
+    margin-top: $header-height;
+}
+
+ul{
+    list-style: none;
+}
+
+.form-wrap{
+    padding: 2.25rem 3rem .75rem;
+    background-color: $background-color;
+    .form__header{
+        color: $text-white;
+        margin-bottom: 1rem;
+        padding-left: 0;
+    }
+}
+
+.filters-wrap{
+    background-color: $pimary-color;
+    align-items: center;
+    padding: 12px 6px 12px 0px;
+}
+
+.rdbtn{
+    text-transform: capitalize !important;
+    &--primary{
+        background-color: $second-color !important;
+    }
+}
