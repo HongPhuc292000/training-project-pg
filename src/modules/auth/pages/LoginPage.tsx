@@ -25,18 +25,17 @@ const LoginPage = () => {
     async (values: ILoginParams) => {
       setErrorMessage('');
       setLoading(true);
-
       const json = await dispatch(
         fetchThunk('https://api.gearfocus.div4.pgtest.co/api/authentication/login', 'post', { email: values.email, password: values.password }),
       );
-
       setLoading(false);
-
+      
       if (json?.success === true) {
         dispatch(setUserInfo(json.user));
         dispatch(replace(ROUTES.listProductManager));
         return;
       }
+
       setErrorMessage(getErrorMessageResponse(json));
     },
     [dispatch],

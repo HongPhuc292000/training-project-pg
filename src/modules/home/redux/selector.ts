@@ -1,49 +1,69 @@
+import { FilterAltSharp } from "@mui/icons-material";
 import { createSelector } from "reselect";
-import { IPayroll } from "../models/payrollModel";
+import { AppState } from "../../../redux/reducer";
+import { IPayroll, IProduct } from "../models/productModal";
 
-//Home Selector 
-export const homeListSelector = (state:any) => state.home.listItems;
+//Product Selector
 
-//Payroll Selector 
-export const payrollListSelector = (state:any) => state.payroll.payrollList;
-export const filterStatusSelector = (state:any) => state.payroll.filters.status;
-export const filterDateFromSelector = (state:any) => state.payroll.filters.from;
-export const filterDateToSelector = (state:any) => state.payroll.filters.to;
-export const filterInvoiceSelector = (state:any) => state.payroll.filters.invoice;
+export const productListSelector = (state:AppState) => state.product.productList;
+export const productFilters = (state:AppState) => state.product.filterProducts;
 
-export const filterInvoiceDateSelector = createSelector(payrollListSelector,filterDateFromSelector,filterDateToSelector,filterInvoiceSelector,(payrollListWrap,from,to,invoice)=>{
-    return(
-        payrollListWrap.filter((item:IPayroll)=>{
-            if(from){
-                if(to){
-                    return ((Date.parse(item.time_created) >= from && Date.parse(item.time_created) <= to) && item.payroll_id.includes(invoice));
+
+export const filterProductSearchSelector = createSelector(productListSelector,productFilters,(productList,filters)=>{
+    return(productList.filter((item:IProduct) => {
+        if(filters.searchType.includes('name')){
+            if(filters.searchType.includes('sku')){
+                if(filters.searchType.includes('des')){
+                    return (item.sku.includes(filters.search) ||
+                        item.name.includes(filters.search) ||
+                        item.description.includes(filters.search)
+                    )
                 }else{
-                    return (Date.parse(item.time_created) >= from  && item.payroll_id.includes(invoice));
+                    return (
+                        item.name.includes(filters.search) ||
+                        item.sku.includes(filters.search)
+                    )
                 }
-            }else if(to){
-                return (Date.parse(item.time_created) <= to  && item.payroll_id.includes(invoice));
             }else{
-                return (item.payroll_id.includes(invoice))
+                return (
+                    item.name.includes(filters.search)
+                )
             }
-        })
-    )
+        }else if(filters.searchType.includes('sku')){
+            if(filters.searchType.includes('des')){
+                return(
+                    item.sku.includes(filters.search) ||
+                    item.description.includes(filters.search)
+                )
+            }else{
+                return item.sku.includes(filters.search)
+            }
+        }else if(filters.searchType.includes('des')){
+            return item.description.includes(filters.search)
+        }else{
+            return item
+        }
+    }))
 })
 
-export const filterAllSelector = createSelector(filterInvoiceDateSelector,filterStatusSelector,(payrollListWrap,status)=>{
-    return(payrollListWrap.filter((item:IPayroll) => {
-        switch (status){
-            case 'receive':
-                return item.received;
-            case 'processing':
-                return item.matched || item.approved;
-            case 'fulfill':
-                return item.fulfilled;
-            case 'cancel':
-                return item.canceled;
-            case 'pending':
-                return !item.received && !item.matched && !item.approved && !item.fulfilled && !item.canceled;
-            default:
-                return item;
-            }
+export const filterProductSCSelector = createSelector(filterProductSearchSelector,productFilters,(productSearchFilter,filters)=>{
+    return(productSearchFilter.filter(item=>{
+        if(filters.category === 'all'){
+            return item;
+        }return item.category === filters.category;
+    }))
+})
+
+export const filterProductSCSSelector = createSelector(filterProductSCSelector,productFilters,(productSCFilter,filters)=>{
+    return(productSCFilter.filter(item=>{
+        if(filters.stock === 'in'){
+            return (+item.amount > 10);
+        }else if(filters.stock === 'low'){
+            return (+item.amount <= 10 && +item.amount >0);
+        }else if(filters.stock === 'out'){
+            return (+item.amount == 0);
+        }else{
+            return item;
+        }
     }))
 })

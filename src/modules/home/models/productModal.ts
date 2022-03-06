@@ -23,16 +23,7 @@
     subpayroll_ids: Array<string>,
     time_created: string,
     volume_input_in_input_currency: number
-}
-
-export interface IPagination{
-  page: number,
-  limit: number,
-  startpage: number,
-  endpage: number,
-  totalRows: number
-}
-  
+} 
 
 export interface IPayroll{
   approved: boolean,
@@ -59,4 +50,44 @@ export interface IPayroll{
   subpayroll_ids: Array<string>,
   time_created: string,
   volume_input_in_input_currency: number
+}
+
+export interface IProduct{
+  amount: string,
+  arrivalDate: string,
+  category: string,
+  condition: string,
+  created: string,
+  description: string,
+  enabled: string,
+  id: string,
+  name: string,
+  participateSale: string,
+  price: string,
+  sku: string,
+  vendor: string,
+  vendorID: string,
+  weight: string,
+}
+
+export interface IListProduct{
+  data: Array<IProduct>,
+  errors: boolean,
+  recordsFiltered: string,
+  recordsTotal: string,
+  success: boolean,
+  user: object
+}
+
+export interface ICategory{
+  id: string,
+  parentId: string,
+  name: string,
+  path: string,
+  pos: string
+}
+
+export interface IStock{
+  name: string,
+  value: string
 }

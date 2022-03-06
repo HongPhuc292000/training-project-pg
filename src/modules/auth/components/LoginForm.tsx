@@ -4,6 +4,7 @@ import { ILoginParams, ILoginValidation } from '../../../models/auth';
 import { validateLogin, validLogin } from '../utils';
 import LoginIcon from '@mui/icons-material/Login';
 import '../scss/login.scss';
+import LoadingModal from '../../home/common/LoadingModal';
 
 interface Props {
   onLogin(values: ILoginParams): void;
@@ -84,10 +85,11 @@ const LoginForm = (props: Props) => {
           type="submit"
           disabled={loading}
         >
-          {loading && <div className="spinner-border spinner-border-sm text-light mr-2" role="status" />}
           <LoginIcon sx={{color: '#fff'}} /> Login
         </button>
       </div>
+
+      {loading && <LoadingModal />}
     </form>
   );
 };

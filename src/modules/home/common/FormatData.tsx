@@ -1,4 +1,4 @@
-import { IPayroll } from "../models/payrollModel";
+import { IPayroll } from "../models/productModal";
 
 export const checkStatus = (status: IPayroll)=>{
     if(status.received){

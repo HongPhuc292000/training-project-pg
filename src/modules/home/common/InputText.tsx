@@ -24,24 +24,20 @@ const useTextStyles = makeStyles({
 });
 
 interface Props{
-  text: string
+  text: string,
+  onChangeFilterInput(type: string,value: string): void
 }
 
 function InputText(props: Props) {
-  const { text } = props;
+  const { text, onChangeFilterInput } = props;
+
+  const onChangInput = (e:any)=>{
+    onChangeFilterInput(e.target.placeholder,e.target.value);
+  }
 
   const classText = useTextStyles();
   return (
-    <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 1, width: '100%' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <TextField className={classText.root} id="outlined-basic" placeholder={text} variant="outlined" />
-    </Box>
+    <input type="text" name="" id="" className='custom-input' placeholder={text} onChange={onChangInput}/>
   )
 }
 

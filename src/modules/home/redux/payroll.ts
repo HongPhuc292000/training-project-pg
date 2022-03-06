@@ -1,5 +1,5 @@
 import { ActionType, createCustomAction, getType } from 'typesafe-actions';
-import { IPayroll } from '../models/payrollModel';
+import { IPayroll } from '../models/productModal';
 
 const initState = {
     filters:{

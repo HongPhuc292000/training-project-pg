@@ -5,6 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { styled, makeStyles } from '@mui/styles'
 import '../scss/home.scss'
+import { ICategory, IStock } from '../models/productModal';
 
 const useSelectStyles = makeStyles({
     root: {
@@ -36,35 +37,45 @@ const useSelectStyles = makeStyles({
 });
 
 interface Props{
-    text: string
+    text: string,
+    data: Array<any>,
+    onChangeFilters(type: string,value: string):void
 }
 
 function SelectBox(props:Props) {
-    const { text } = props;
-    const [age, setAge] = React.useState('');
+    const { text, data, onChangeFilters } = props;
 
-    const handleChange = (event: SelectChangeEvent) => {
-        setAge(event.target.value);
-    };
+    const handleChangeSelect = (e:any)=>{
+        if(e.target.id === 'list-category'){
+            onChangeFilters('category', e.target.value);
+        }else if(e.target.id === 'list-stock'){
+            onChangeFilters('stock', e.target.value)
+        }
+    }
 
     const classes = useSelectStyles();
     return (
         <div>
-            <FormControl sx={{ m: 1 }} className={classes.root}>
-                <Select
-                    value={age}
-                    onChange={handleChange}
-                    displayEmpty
-                    inputProps={{ 'aria-label': 'Without label' }}
-                >
-                    <MenuItem value="">
-                        <em>{text}</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-            </FormControl>
+            <select
+                name={`list-${text}`}
+                id={`list-${text}`}
+                className='custom-select'
+                onChange={handleChangeSelect}
+            >
+                {
+                    (text==='category'?<option value='all'>Any category</option>:'')
+                }
+
+                {
+                    data?.map(item => {
+                        if(text === 'category'){
+                            return (<option key={item?.id} value={item.name}>{item.name}</option>);
+                        }else if(text === 'stock'){
+                            return (<option key={item?.value} value={item.value}>{item.name}</option>);
+                        }
+                    })
+                }
+            </select>
         </div> 
     )
 }
