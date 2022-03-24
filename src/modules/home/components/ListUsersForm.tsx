@@ -17,6 +17,8 @@ import TableUser from './TableUser';
 import Button from '@mui/material/Button';
 import { ICountry, IRole, IState } from '../models/countryModal';
 import { formatDate } from '../common/FormatData';
+import { listDeleteVendors } from '../redux/selector';
+import { setDeleteVendors } from '../redux/vendor';
 
 const usePaginationStyles = makeStyles({
   root: {
@@ -32,10 +34,12 @@ const usePaginationStyles = makeStyles({
 
 function ListUsersForm() {
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
+  const listDeletes = useSelector(listDeleteVendors);
 
   const [listNumberItemPerPage,setListNumberItemPerPage] = React.useState([10,25,50,75,100]);
   const [selectedPage,setSelectedPage] = React.useState(false);
   const [selectedCountry, setSelectedCountry] = React.useState('all');
+  const [checkedAll, setCheckedAll] = React.useState(false)
   const [listVendors, setListVendors] = React.useState<Array<ISeller> | undefined>();
   const [listCountry, setListCountry] = React.useState<Array<ICountry> | undefined>();
   const [listState, setListState] = React.useState<Array<IState> | undefined>();
@@ -136,6 +140,14 @@ function ListUsersForm() {
     setListRole([...json.data.administrator, ...json.data.customer])
   },[])
 
+  const deleteVendors = useCallback(async()=>{
+    setLoading(true)
+    const json = await dispatch(fetchThunk('https://api.gearfocus.div4.pgtest.co/apiAdmin/users/edit','post', {params: listDeletes}));
+    getListVendors();
+    setPage(1)
+    setLoading(false)
+  },[listDeletes])
+
   useEffect(()=>{
     getListVendors();
     getListCountry();
@@ -147,7 +159,7 @@ function ListUsersForm() {
   };
 
   const handleChangeNumberPerPage = (e:any)=>{
-    setPagination(parseInt(e.target.value))
+    setPagination(e.target.value)
   }
 
   const handleChangeSearchInput = (e:any)=>{
@@ -221,10 +233,11 @@ function ListUsersForm() {
   }
 
   const handleRemoveSelectedUsers = ()=>{
-    
+    deleteVendors();
+    dispatch(setDeleteVendors([]));
   }
 
-  console.log(filterTemp);
+  console.log(listDeletes);
   
 
   const classes = usePaginationStyles();

@@ -1,10 +1,16 @@
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import moment from 'moment';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ISeller } from '../models/userModals';
+import { ISeller, ISellerDelete } from '../models/userModals';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { listDeleteVendors } from '../redux/selector';
+import { useDispatch, useSelector } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppState } from '../../../redux/reducer';
+import { Action } from 'redux';
+import { setDeleteVendors } from '../redux/vendor';
 
 interface Props{
     data: ISeller,
@@ -12,6 +18,8 @@ interface Props{
 }
 
 function UserItem(props: Props) {
+    const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
+    const listDeletes = useSelector(listDeleteVendors);
     const { data, allStatus } = props;
     const [checkboxStatus, setCheckboxStatus] = React.useState(false);
     const handleConvertDate = (dateString: string)=>{
@@ -19,14 +27,31 @@ function UserItem(props: Props) {
         return dateConverted;
     }
     const handlChangeCheckboxStatus = ()=>{
-        setCheckboxStatus(!checkboxStatus);
+      setCheckboxStatus(!checkboxStatus)
+      let vendorIdAr: Array<ISellerDelete> | undefined = [];
+      const check = checkboxStatus;
+      if(check){
+        vendorIdAr = listDeletes.filter(item=>{
+          return item.id != data.profile_id;
+        })
+      }
+      else{
+        vendorIdAr = [...listDeletes, {id: data.profile_id, delete: 1}]
+      }
+      dispatch(setDeleteVendors(vendorIdAr));
     }
+
+    React.useEffect(()=>{
+        setCheckboxStatus(allStatus);
+    },[allStatus])
+
+    // console.log(listDeletes);
 
   return (
     <TableRow key={data.profile_id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
       <TableCell component="th" scope="row">
         <input
-          checked={checkboxStatus ? checkboxStatus : allStatus}
+          checked={allStatus ? allStatus && checkboxStatus : checkboxStatus}
           type="checkbox"
           name={data.profile_id}
           id={data.profile_id}

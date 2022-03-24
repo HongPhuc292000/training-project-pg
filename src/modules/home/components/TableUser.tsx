@@ -11,8 +11,15 @@ import { styled, makeStyles } from '@mui/styles'
 import { IProduct } from '../models/productModal';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { ISeller } from '../models/userModals';
+import { ISeller, ISellerDelete } from '../models/userModals';
 import UserItem from './UserItem';
+import { setDeleteVendors } from '../redux/vendor';
+import { listDeleteVendors } from '../redux/selector';
+import { useDispatch, useSelector } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppState } from '../../../redux/reducer';
+import { Action } from 'redux';
+import { fetchThunk } from '../../common/redux/thunk';
 
 const useSelectStyles = makeStyles({
   root: {
@@ -93,31 +100,33 @@ const useSelectStyles = makeStyles({
   },
 });
 
-
-
 interface Props{
   data: Array<ISeller> | undefined,
 }
 
 export default function TableUser(props: Props) {
-
+  const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const { data } = props;
   const [allCheckboxStatus, setAllCheckboxStatus] = React.useState(false);
-  const [checkboxStatus, setCheckboxStatus] = React.useState(false);
 
-  const handleConvertDate = (dateString: string)=>{
-    const dateConverted = moment(Number.parseInt(dateString) * 1000).format('lll');
-    return dateConverted;
-  }
+  React.useEffect(()=>{
+    setAllCheckboxStatus(false)
+  },[data])
 
   const handleSelectAll = ()=>{
     setAllCheckboxStatus(!allCheckboxStatus);
-    setCheckboxStatus(!checkboxStatus);
+    let vendorIdAr: Array<ISellerDelete> | undefined =  [];
+    const check = allCheckboxStatus;
+    if(check){
+      vendorIdAr = [];
+    }else{
+      vendorIdAr = data?.map(item=>{
+        return {id: item.profile_id, delete: 1};
+      })
+    }
+    dispatch(setDeleteVendors(vendorIdAr));
   }
-
-  const handlChangeCheckboxStatus = ()=>{
-    setCheckboxStatus(!checkboxStatus);
-  }
+  
 
   const classes = useSelectStyles();
   return (
@@ -125,7 +134,7 @@ export default function TableUser(props: Props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell><input type="checkbox" name="select-all" id="select-all" onChange={handleSelectAll} /></TableCell>
+            <TableCell><input checked={allCheckboxStatus} type="checkbox" name="select-all" id="select-all" onChange={handleSelectAll} /></TableCell>
             <TableCell>Login/Email</TableCell>
             <TableCell align="left">Name</TableCell>
             <TableCell align="left">Access level</TableCell>
@@ -139,45 +148,7 @@ export default function TableUser(props: Props) {
         </TableHead>
         <TableBody>
           {data?.map((row) => (
-            <UserItem key={row.profile_id} data={row} allStatus = {allCheckboxStatus}/>
-            // <TableRow
-            //   key={row.profile_id}
-            //   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            // >
-            //   <TableCell component="th" scope="row">
-            //     <input checked={checkboxStatus ? checkboxStatus : allCheckboxStatus} type="checkbox" name={row.profile_id} id={row.profile_id} onChange={handlChangeCheckboxStatus} />
-            //   </TableCell>
-            //   <TableCell align="left">
-            //     <Link to={`/detailVendor/${row.profile_id}`} className="text-wrap-1-5 link" >
-            //       {row.vendor}
-            //     </Link>
-            //     <span className="text-wrap-1-5">{row.storeName}</span>
-            //   </TableCell>
-            //   <TableCell align="left">
-            //     <span className='text-wrap-2'>{row.fistName + ' ' + row.lastName}</span>
-            //   </TableCell>
-            //   <TableCell align="left">
-            //     {row.access_level}
-            //   </TableCell>
-            //   <TableCell align="left">
-            //     {row.product}
-            //   </TableCell>
-            //   <TableCell align="left">
-            //     {row.order.order_as_buyer} 
-            //   </TableCell>
-            //   <TableCell align="left">
-            //     {row.wishlist}
-            //   </TableCell>
-            //   <TableCell align="left" sx={{width: '136px'}}>{handleConvertDate(row.created)}</TableCell>
-            //   <TableCell align="left" sx={{width: '136px'}}>{handleConvertDate(row.last_login)}</TableCell>
-            //   <TableCell align="left">
-            //     <div>
-            //       <button className='custom-button'>
-            //         <DeleteIcon />
-            //       </button>
-            //     </div>
-            //   </TableCell>
-            // </TableRow>
+            <UserItem key={row.profile_id} data={row} allStatus={allCheckboxStatus}/>
           ))}
         </TableBody>
       </Table>

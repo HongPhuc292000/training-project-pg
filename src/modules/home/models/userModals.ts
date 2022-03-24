@@ -12,3 +12,8 @@ export interface ISeller{
     vendor_id: string,
     wishlist: string
 }
+
+export interface ISellerDelete{
+    id: string,
+    delete: number
+}
