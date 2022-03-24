@@ -12,11 +12,15 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../../redux/reducer';
 import { Action } from 'redux';
 import { fetchThunk } from '../../common/redux/thunk';
-import { IListProduct } from '../models/productModal';
+import { IListProduct, IProduct } from '../models/productModal';
 import { styled, makeStyles } from '@mui/styles'
 import { filterProducts, setInitListProducts } from '../redux/product';
-import { filterProductSearchSelector, filterProductSCSSelector } from '../redux/selector';
+import { filterProductSearchSelector, filterProductSCSSelector, filterProductSCSSSelector } from '../redux/selector';
 import CheckBox from '../common/CheckBox';
+import LoadingModal from '../common/LoadingModal';
+import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
+import { IListVendors, IVendor } from '../models/vendorModals';
+import Button from '@mui/material/Button';
 
 const usePaginationStyles = makeStyles({
   root: {
@@ -35,20 +39,37 @@ function ListProductForm() {
 
   const [listNumberItemPerPage,setListNumberItemPerPage] = React.useState([10,25,50,75,100]);
   const [selectedPage,setSelectedPage] = React.useState(false);
-  const [listProduct, setListProduct] = React.useState<any>();
+  const [listProduct, setListProduct] = React.useState<undefined | Array<IProduct>>([]);
   const [listCategories, setListCategories] = React.useState<any>();
-  const [listStock, setListStock] = React.useState([{name: 'Any stock status',value: 'all'},{name: 'In stock',value: 'in'},{name: 'Low stock',value: 'low'}, {name: 'SOLD',value: 'out'}])
+  const [listStock, setListStock] = React.useState([{name: 'Any stock status',value: 'all'},{name: 'In stock',value: 'in'},{name: 'Low stock',value: 'low'}, {name: 'SOLD',value: 'out'}]);
+  const [listAvailable, setListAvailable] = React.useState([
+    {
+      name: 'Any availability status',
+      value: 'all'
+    },
+    {
+      name: 'Only enabled',
+      value: '1'
+    },
+    {
+      name: 'Only disabled',
+      value: '0'
+    },
+  ])
+  const [listVendors, setListVendors] = React.useState<undefined | Array<IVendor>>([]);
   const [page, setPage] = React.useState(1);
   const [pagination, setPagination] = React.useState(25);
   const [filters,setFilters] = React.useState({
     search: '',
     category: 'all',
     stock: 'all',
+    status: 'all',
     searchType: new Array(),
   })
+  const [loading, setLoading] = React.useState(false);
 
 
-  const storeProductData = useSelector(filterProductSCSSelector);
+  const storeProductData = useSelector(filterProductSCSSSelector);
 
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -60,7 +81,7 @@ function ListProductForm() {
 
   const getListProduct = useCallback(async()=>{
     const json = await dispatch(
-      fetchThunk('https://api.gearfocus.div4.pgtest.co/api/products/list', 'get'),
+      fetchThunk(`https://api.gearfocus.div4.pgtest.co/api/products/list`, 'get'),
     );
     setListProduct(json.data);
     dispatch(setInitListProducts(json.data));
@@ -73,19 +94,28 @@ function ListProductForm() {
     setListCategories(json.data);
   },[dispatch]);
 
+  const getListVendors = useCallback(async()=>{
+    const json = await dispatch(
+      fetchThunk('https://api.gearfocus.div4.pgtest.co/apiAdmin/vendors/list', 'get'),
+    );
+    setListVendors(json.data);
+  },[dispatch]);
+
   useEffect(()=>{
-    getListProduct()
-  },[getListProduct]);
-  
-  useEffect(()=>{
+    setLoading(true)
+    getListProduct();
     getListCategories();
-  },[getListCategories]);
+    getListVendors();
+    setLoading(false)
+  },[getListProduct,getListCategories,getListVendors]);
 
   const handleChangeFilterSelect = (type: string, value: string)=>{
       if(type === 'category'){
         setFilters({...filters,category: value})
       }else if(type === 'stock'){
         setFilters({...filters,stock: value})
+      }else if(type === 'status'){
+        setFilters({...filters,status: value})
       }
   }
 
@@ -106,20 +136,18 @@ function ListProductForm() {
       setFilters({...filters, searchType: [...filters.searchType.filter(item=>(item!=type))]})
     }
   }
-
-  console.log(useSelector(state=>state))
-  console.log(filters);
   
   const classes = usePaginationStyles();
   return (
     <div className="col-10 form-wrap">
+
       <div className='row'>
         <h2 className='col-12 form__header'>Products</h2>
       </div>
       
       <div className="row filters-wrap">
         <div className='col-6'>
-          <InputText text="Search keywords" onChangeFilterInput={handleChangeFilterInput}/>
+          <InputText text="Search keywords" data={[]} name='search' onChangeFilterInput={handleChangeFilterInput}/>
         </div>
         <div className="col-3">
           <SelectBox text="category" data={listCategories} onChangeFilters={handleChangeFilterSelect}/>
@@ -128,7 +156,7 @@ function ListProductForm() {
           <SelectBox text="stock" data={listStock} onChangeFilters={handleChangeFilterSelect}/>
         </div>
         <div className="col-1 filters-btn">
-          <CustomButton text="Search" color='primary' onClick={handleChangeFilters}/>
+          <CustomButton linkto='' text="Search" color='primary' onClick={handleChangeFilters}/>
         </div>
       </div>
 
@@ -149,16 +177,16 @@ function ListProductForm() {
         </div>
         <div className="col-4 filters__item">
           <label htmlFor="#">Availability</label>
-          <SelectBox text="Any availability status" data={listCategories} onChangeFilters={handleChangeFilterSelect}/>
+          <SelectBox text="status" data={listAvailable} onChangeFilters={handleChangeFilterSelect}/>
         </div>
         <div className="col-4 filters__item">
           <label htmlFor="#">Vendor</label>
-          <InputText text="Vendor" onChangeFilterInput={handleChangeFilterInput}/>
+          <InputText text="Vendor" data={listVendors} name='vendor' onChangeFilterInput={handleChangeFilterInput}/>
         </div>
       </div>
 
       <div className="row">
-        <CustomButton text="Add Product" color='primary' onClick={handleChangeFilters}/>
+        <CustomButton linkto='/createProduct' text="Add Product" color='primary' onClick={handleChangeFilters}/>
       </div>
 
       <div className="row list-products">
@@ -180,7 +208,17 @@ function ListProductForm() {
             <label htmlFor="number-item">per page</label>
           </div>
         </div>
-        
+      </div>
+      <div className='fixed-action d-flex'>
+        <Button className="rdbtn rdbtn--orange me-3" variant="contained">
+          Save changes
+        </Button>
+        <Button className="rdbtn rdbtn--orange me-3" variant="contained">
+          Remove selected
+        </Button>
+        <Button className="rdbtn rdbtn--orange" variant="contained">
+          Export all: CSV
+        </Button>
       </div>
     </div>
   )

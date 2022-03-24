@@ -1,5 +1,6 @@
 import { ActionType, createCustomAction, getType } from 'typesafe-actions';
 import { IProduct } from '../models/productModal';
+import { ISeller } from '../models/userModals';
 
 const initState = {
     filterProducts:{
@@ -9,7 +10,7 @@ const initState = {
         status: 'all',
         searchType: [],
     },
-    productList: [],
+    vendorList: [],
 }
 
 export interface IFilterProduct{
@@ -20,29 +21,23 @@ export interface IFilterProduct{
     searchType: Array<string>
 }
 
-export interface IProductList{
+export interface IVendorList{
     filterProducts: IFilterProduct,
-    productList: Array<IProduct>,
+    vendorList: Array<ISeller>,
 }
 
-export const setInitListProducts = createCustomAction('product/setInitListProducts', (data:Array<IProduct>) => ({
+export const setInitListVendors = createCustomAction('product/setInitListProducts', (data:Array<ISeller>) => ({
     data,
 }));
 
-export const filterProducts = createCustomAction('product/filterProducts', (data:IFilterProduct) => ({
-    data,
-}));
-
-const actions = { setInitListProducts, filterProducts};
+const actions = { setInitListVendors};
 
 type Action = ActionType<typeof actions>;
 
-export default function reducerProduct(state: IProductList = initState , action: Action) {
+export default function reducerVendor(state: IVendorList = initState , action: Action) {
     switch (action.type) {
-        case getType(setInitListProducts):
+        case getType(setInitListVendors):
             return {...state, productList: action.data}
-        case getType(filterProducts):
-            return {...state, filterProducts: action.data};
         default:
           return state;
     }

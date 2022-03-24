@@ -1,0 +1,58 @@
+@import './variables.scss';
+.form-create__wrap{
+    background-color: $background-color;
+}
+
+.seperate-space{
+    background-color: $pimary-color;
+    position: relative;
+    margin-left: -48px;
+    margin-right: -48px;
+    height: 20px;
+}
+
+.input__value{
+    border: none;
+    background-color: $pimary-color;
+    padding: 7px 16px;
+    border-radius: 4px;
+    outline: none;
+    color: $text-white;
+}
+
+.form-create__wrap{
+    .form__item:not(:last-child){
+        margin-bottom: 24px; 
+    }
+
+    .form__item:last-child{
+        margin-bottom: 48px;
+    }
+}
+
+.input__image-wrap{
+    --input-size: 124px;
+    position: relative;
+    width: var(--input-size);
+    height: var(--input-size);
+    border: 1px dashed $text-white;
+    span{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        svg{
+            width: 60px;
+            height: auto;
+            color: $text-white;
+            border-bottom: 4px solid $second-color;
+        }
+        
+    }
+}
+
+.input__image{
+    opacity: 0;
+    width: var(--input-size);
+    height: var(--input-size);
+}

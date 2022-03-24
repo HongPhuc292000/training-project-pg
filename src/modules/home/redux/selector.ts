@@ -1,7 +1,7 @@
 import { FilterAltSharp } from "@mui/icons-material";
 import { createSelector } from "reselect";
 import { AppState } from "../../../redux/reducer";
-import { IPayroll, IProduct } from "../models/productModal";
+import { IProduct } from "../models/productModal";
 
 //Product Selector
 
@@ -66,4 +66,16 @@ export const filterProductSCSSelector = createSelector(filterProductSCSelector,p
             return item;
         }
     }))
+})
+
+export const filterProductSCSSSelector = createSelector(filterProductSCSSelector, productFilters, (productSCSFilter,filters)=>{
+    return(
+        productSCSFilter.filter(item=>{
+            if(filters.status === 'all'){
+                return item;
+            }else{
+                return item.enabled === filters.status;
+            }
+        })
+    )
 })

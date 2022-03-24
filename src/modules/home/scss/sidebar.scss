@@ -20,10 +20,6 @@
             font-size: 0.8125rem;
             font-weight: 600;
         }
-        
-        // &:not(:last-child) > a{
-        //     border-bottom: 1px solid #1b1b38;
-        // }
     }
     & > :not(:last-child){
         border-bottom: 1px solid #1b1b38;
@@ -31,10 +27,8 @@
 }
 
 .sidebar-item{
-    &:hover{
-        a{
-            color: $second-color;
-        }
+    &:hover > a{
+        color: $second-color;
     }
 
     &__title{

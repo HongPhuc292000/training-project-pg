@@ -5,7 +5,6 @@ import '../scss/common.scss';
 function LoadingModal() {
   return (
     <div className='modal__wrap'>
-        {/* <div className="modal__overlay"></div> */}
         <div className='modal__content'>
             <img src={loadingImg} alt="loading" />
         </div>

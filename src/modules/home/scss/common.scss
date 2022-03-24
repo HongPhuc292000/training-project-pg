@@ -17,14 +17,39 @@ a{
 }
 
 .form-wrap{
-    padding: 2.25rem 3rem .75rem;
+    padding: 2.25rem 3rem 7rem;
     background-color: $background-color;
     height: calc(100vh - #{$header-height});
     overflow-y: scroll;
     .form__header{
+        font-size: 2rem;
+        font-weight: 400;
         color: $text-white;
         margin-bottom: 1rem;
         padding-left: 0;
+        text-transform: capitalize;
+    }
+    /* width */
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+    
+    /* Track */
+    &::-webkit-scrollbar-track {
+        border-radius: 4px;
+        background-color: #13132B;
+    }
+    
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: $second-color; 
+        border-radius: 4px;
+        transition: color linear 0.5s;
+    }
+    
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: #c6acfd; 
     }
 }
 
@@ -35,7 +60,7 @@ a{
     &-2{
         border-top: 1px solid $background-color;
         background-color: $pimary-color;
-        padding: 12px 8px;
+        padding: 16px 8px;
         color: $text-white;
         margin-bottom: 1.25rem;
     }
@@ -64,11 +89,7 @@ a{
         justify-content: center;
 
         .custom-select{
-            width: 170px;
-        }
-
-        .custom-input{
-            width: 170px;
+            width: 220px;
         }
 
         label{
@@ -81,12 +102,86 @@ a{
     }
 }
 
+.suggest-input__{
+    &wrap{
+        width: 100%;
+        position: relative;
+    }
+
+    &list{
+        display: none;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 100%;
+        background-color: $text-white;
+        border-radius: 4px;
+        padding: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 240px;
+        /* width */
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        /* Track */
+        &::-webkit-scrollbar-track {
+            border-radius: 4px;
+            background-color: #13132B;
+        }
+        
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: $second-color; 
+            border-radius: 4px;
+            transition: color linear 0.5s;
+        }
+        
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+            background: #c6acfd; 
+        }
+        &.d-block{
+            display: block;
+        }
+    }
+
+    &item{
+        padding: 14px;
+        color: $text-white;
+        background-color: $pimary-color;
+        border: 1px solid $background-color;
+        cursor: pointer;
+        &:hover{
+            background-color: $background-color;
+        }
+    }
+}
+
+// button
+
 .rdbtn{
     text-transform: capitalize !important;
     width: fit-content;
     padding: 0.25rem 1rem;
+    font-weight: 500 !important;
     &--primary{
         background-color: $second-color !important;
+    }
+
+    &--orange{
+        background-color: #F0AD4E !important;   
+    }
+    &:hover{
+        color: $background-color;
+        a{
+            color: $background-color;
+        }
+    }
+    a{
+        transition: color linear 0.1s;
+        color: $text-white;
     }
 }
 
@@ -96,7 +191,72 @@ a{
     padding: 6px 10px;
     border: none;
     border-radius: 4px;
+    &:hover{
+        svg{
+            color: $background-color;
+        }
+    }
+
+    svg{
+        transition: color linear 0.1s;
+    }
 }
+
+.around-btn{
+    --btn-size: 32px;
+    border-radius: 50%;
+    border: none;
+    height: var(--btn-size);
+    width: var(--btn-size);
+    padding: 0;
+    a{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        height: var(--btn-size);
+        width: var(--btn-size);
+        line-height: var(--btn-size);
+        svg{
+            font-size: 1rem;
+        }
+    }
+}
+
+// end button
+
+.text-wrap-1{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+    display: block;
+    &.link{
+        &:hover{
+            text-decoration: underline;
+            color: $link-color;
+        }
+    }
+}
+
+.text-wrap-1-5{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    display: block;
+    &.link{
+        &:hover{
+            text-decoration: underline;
+            color: $link-color;
+        }
+    }
+}
+
 
 .text-wrap-2{
     display: -webkit-box;
@@ -191,7 +351,23 @@ a{
     color: $text-white;
     border: 1px solid $background-color;
     padding: 8px 16px;
+    font-weight: 600;
+    option{
+        font-weight: 600;
+    }
+}
 
+// fixed action
+.fixed-action{
+    position: fixed;
+    padding: 15px 36px;
+    box-shadow: 0 0 13px 0 #b18aff;
+    // left: 0;
+    width: inherit;
+    right: 0;
+    background-color: $pimary-color;
+    bottom: 0;
+    z-index: 1;
 }
 
 // modal
@@ -208,6 +384,7 @@ a{
         justify-content: center;
         align-items: center;
         transition: all linear 1.5s;
+        z-index: 100;
     }
 
     &content{
@@ -218,6 +395,39 @@ a{
             width: auto;
         }
     }
+}
+
+.input__label{
+    color: $text-white;
+}
+
+// width
+.wd-30{
+    width: 30%;
+}
+
+.wd-60{
+    width: 60%;
+}
+
+.wd-100{
+    width: 100%;
+}
+
+// input note
+.input-note{
+    font-size: 0.75rem;
+    color: $text-white;
+}
+
+// font-size
+.fz-075{
+    font-size: 0.875rem;
+}
+
+// text align
+.txt-alr{
+    text-align: right;
 }
 
 @keyframes around{

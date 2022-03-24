@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
+import ListUsersForm from '../components/ListUsersForm';
 import '../scss/home.scss';
 
 function UserManagement() {
@@ -8,11 +9,9 @@ function UserManagement() {
     <>
       <Header />
       <div className='container-fluid main-wrap'>
-        <div className='main-container row'>
+        <div className='main-container row justify-content-end'>
           <Sidebar />
-          <div className="col-10 p-0">
-            
-          </div>
+          <ListUsersForm />
         </div>
       </div>
     </>

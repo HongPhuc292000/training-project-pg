@@ -49,7 +49,9 @@ function SelectBox(props:Props) {
         if(e.target.id === 'list-category'){
             onChangeFilters('category', e.target.value);
         }else if(e.target.id === 'list-stock'){
-            onChangeFilters('stock', e.target.value)
+            onChangeFilters('stock', e.target.value);
+        }else if(e.target.id === 'list-status'){
+            onChangeFilters('status',e.target.value);
         }
     }
 
@@ -70,7 +72,7 @@ function SelectBox(props:Props) {
                     data?.map(item => {
                         if(text === 'category'){
                             return (<option key={item?.id} value={item.name}>{item.name}</option>);
-                        }else if(text === 'stock'){
+                        }else if(text === 'stock' || text === 'status'){
                             return (<option key={item?.value} value={item.value}>{item.name}</option>);
                         }
                     })

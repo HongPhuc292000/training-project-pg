@@ -11,13 +11,29 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { styled, makeStyles } from '@mui/styles'
 import { IProduct } from '../models/productModal';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 const useSelectStyles = makeStyles({
   root: {
     backgroundColor: '#323259',
     padding: '0',
+    '&::-webkit-scrollbar':{
+      width: '4px',
+    },
+    '&::-webkit-scrollbar-track':{
+      backgroundColor: '#13132B',
+    },
+    '&::-webkit-scrollbar-thumb':{
+      background: '#AD88FA',
+      borderRadius: '4px',
+      transition: 'color linear 0.5s'
+    },
+    '&::-webkit-scrollbar-thumb:hover':{
+      background: '#c6acfd',
+    },
   },
   table:{
+    
     '& thead':{
       '& th':{
         fontSize: '15px',
@@ -43,7 +59,6 @@ const useSelectStyles = makeStyles({
           fontSize: '44px',
           borderLeft: '1px solid #fff',
           borderRight: '1px dashed #fff',
-          color: '#72B25B',
           '&:hover':{
             cursor: 'pointer',
           },
@@ -66,6 +81,14 @@ const useSelectStyles = makeStyles({
         },
       },
     },
+  },
+
+  powericonon:{
+    color: "#72B25B",
+  },
+
+  powericonoff:{
+    color: '#fff',
   },
 });
 
@@ -91,8 +114,8 @@ export default function BasicTable(props: Props) {
   }
 
   const formatPrice = (price: string)=>{
-    const priceDot = price.indexOf('.');
-    const formatedPrice = price.slice(0, priceDot + 3);
+    const priceDot = price?.indexOf('.');
+    const formatedPrice = price?.slice(0, priceDot + 3);
     return formatedPrice;
   }
 
@@ -126,12 +149,14 @@ export default function BasicTable(props: Props) {
               <TableCell component="th" scope="row">
                 <input checked={checkboxStatus} type="checkbox" name={row.id} id={row.id} />
               </TableCell>
-              <TableCell align="left"><PowerSettingsNewIcon/></TableCell>
+              <TableCell align="left"><PowerSettingsNewIcon className={row.enabled === '0' ? classes.powericonoff : classes.powericonon}/></TableCell>
               <TableCell align="left">
                 <span className='text-wrap-2'>{row.sku}</span>
               </TableCell>
               <TableCell align="left">
-                <a href="" className='text-wrap-2 link'>{row.name}</a>
+                <Link to={`/detailProduct/${row.id}`} className="text-wrap-2 link" >
+                  {row.name}
+                </Link>
               </TableCell>
               <TableCell align="left">
                 <span className='text-wrap-2'>{row.category}</span>
@@ -143,7 +168,7 @@ export default function BasicTable(props: Props) {
                 <input className='item__price stock' type="text" value={row.amount} onClick={handleChangePrice}/>
               </TableCell>
               <TableCell align="left">
-                <a href="" className='text-wrap-2 link'>{row.vendor}</a>
+                <a href="" className='text-wrap-1 link'>{row.vendor}</a>
               </TableCell>
               <TableCell align="left" sx={{width: '114px'}}>{handleConvertDate(row.arrivalDate)}</TableCell>
               <TableCell align="left">

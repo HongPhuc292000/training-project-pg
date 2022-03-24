@@ -32,6 +32,7 @@ const LoginPage = () => {
       
       if (json?.success === true) {
         dispatch(setUserInfo(json.user));
+        Cookies.set(ACCESS_TOKEN_KEY, json.user_cookie)
         dispatch(replace(ROUTES.listProductManager));
         return;
       }
@@ -40,6 +41,7 @@ const LoginPage = () => {
     },
     [dispatch],
   );
+
 
   return (
     <div

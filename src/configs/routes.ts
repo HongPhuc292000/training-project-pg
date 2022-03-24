@@ -1,5 +1,8 @@
 export const ROUTES = {
   login: '/login',
-  userManager: '/user',
-  listProductManager: '/listProduct'
+  userManager: '/listUsers',
+  listProductManager: '/listProducts',
+  createProduct: '/createProduct',
+  detailProduct: '/detailProduct',
+  detailVendor: '/detailVendor',
 };
