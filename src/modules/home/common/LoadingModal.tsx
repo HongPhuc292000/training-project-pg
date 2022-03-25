@@ -6,7 +6,7 @@ function LoadingModal() {
   return (
     <div className='modal__wrap'>
         <div className='modal__content'>
-            <img src={loadingImg} alt="loading" />
+          <img src={loadingImg} alt="loading" />
         </div>
     </div>
   )

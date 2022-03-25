@@ -38,3 +38,8 @@ export interface IStock{
   value: string
 }
 
+export interface IUpdateEnabled{
+  id: string,
+  enable: number
+}
+

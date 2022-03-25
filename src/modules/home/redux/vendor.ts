@@ -1,6 +1,5 @@
 import { ActionType, createCustomAction, getType } from 'typesafe-actions';
-import { IProduct } from '../models/productModal';
-import { ISeller, ISellerDelete } from '../models/userModals';
+import { ISellerDelete } from '../models/userModals';
 
 const initState = {
     deleteVendors: []

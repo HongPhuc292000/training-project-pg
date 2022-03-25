@@ -127,14 +127,15 @@ export default function TableUser(props: Props) {
     dispatch(setDeleteVendors(vendorIdAr));
   }
   
-
   const classes = useSelectStyles();
   return (
     <TableContainer component={Paper} className={classes.root}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell><input checked={allCheckboxStatus} type="checkbox" name="select-all" id="select-all" onChange={handleSelectAll} /></TableCell>
+            <TableCell>
+              <input checked={allCheckboxStatus} type="checkbox" name="select-all" id="select-all" onChange={handleSelectAll} />
+            </TableCell>
             <TableCell>Login/Email</TableCell>
             <TableCell align="left">Name</TableCell>
             <TableCell align="left">Access level</TableCell>
@@ -147,9 +148,9 @@ export default function TableUser(props: Props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data?.map((row) => (
+          {data ? data?.map((row) => (
             <UserItem key={row.profile_id} data={row} allStatus={allCheckboxStatus}/>
-          ))}
+          )) : ''}
         </TableBody>
       </Table>
     </TableContainer>

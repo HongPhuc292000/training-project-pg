@@ -6,12 +6,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { styled, makeStyles } from '@mui/styles'
+import { makeStyles } from '@mui/styles'
 import { IProduct } from '../models/productModal';
-import moment from 'moment';
-import { Link } from 'react-router-dom';
+import ProductItem from './ProductItem';
+import { ISellerDelete } from '../models/userModals';
+import { useDispatch, useSelector } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppState } from '../../../redux/reducer';
+import { Action } from 'redux';
+import { setDeleteProducts } from '../redux/product';
 
 const useSelectStyles = makeStyles({
   root: {
@@ -82,53 +85,49 @@ const useSelectStyles = makeStyles({
       },
     },
   },
-
-  powericonon:{
-    color: "#72B25B",
-  },
-
-  powericonoff:{
-    color: '#fff',
-  },
 });
 
 
-
 interface Props{
-  data: Array<IProduct>,
+  data: Array<IProduct> | undefined,
+  onRefreshData(): void
 }
 
 export default function BasicTable(props: Props) {
+  const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
 
-  const { data } = props;
-  const [priceStatus, setPriceStatus] = React.useState(true);
-  const [checkboxStatus, setCheckBoxStatus] = React.useState(false);
+  const { data, onRefreshData } = props;
+  const [allCheckboxStatus, setAllCheckboxStatus] = React.useState(false);
 
-  const handleChangePrice = ()=>{
-    setPriceStatus(false);
-  }
-
-  const handleConvertDate = (dateString: string)=>{
-    const dateConverted = moment(Number.parseInt(dateString) * 1000).format('ll');
-    return dateConverted;
-  }
-
-  const formatPrice = (price: string)=>{
-    const priceDot = price?.indexOf('.');
-    const formatedPrice = price?.slice(0, priceDot + 3);
-    return formatedPrice;
-  }
+  React.useEffect(()=>{
+    setAllCheckboxStatus(false)
+  },[data])
 
   const handleSelectAll = ()=>{
-    setCheckBoxStatus(!checkboxStatus);
+    setAllCheckboxStatus(!allCheckboxStatus);
+    let productIdAr: Array<ISellerDelete> | undefined =  [];
+    const check = allCheckboxStatus;
+    if(check){
+      productIdAr = [];
+    }else{
+      productIdAr = data?.map(item=>{
+        return {id: item.id, delete: 1};
+      })
+    }
+    dispatch(setDeleteProducts(productIdAr));
+  } 
+
+  const handleRefreshTable = ()=>{
+    onRefreshData();
   }
+
   const classes = useSelectStyles();
   return (
     <TableContainer component={Paper} className={classes.root}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell><input type="checkbox" name="select-all" id="select-all" onChange={handleSelectAll} /></TableCell>
+            <TableCell><input checked={allCheckboxStatus} type="checkbox" name="select-all" id="select-all" onChange={handleSelectAll} /></TableCell>
             <TableCell></TableCell>
             <TableCell>SKU</TableCell>
             <TableCell align="left">Name</TableCell>
@@ -141,45 +140,9 @@ export default function BasicTable(props: Props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data?.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                <input checked={checkboxStatus} type="checkbox" name={row.id} id={row.id} />
-              </TableCell>
-              <TableCell align="left"><PowerSettingsNewIcon className={row.enabled === '0' ? classes.powericonoff : classes.powericonon}/></TableCell>
-              <TableCell align="left">
-                <span className='text-wrap-2'>{row.sku}</span>
-              </TableCell>
-              <TableCell align="left">
-                <Link to={`/detailProduct/${row.id}`} className="text-wrap-2 link" >
-                  {row.name}
-                </Link>
-              </TableCell>
-              <TableCell align="left">
-                <span className='text-wrap-2'>{row.category}</span>
-              </TableCell>
-              <TableCell align="left">
-                <input className='item__price price' type="text" value={formatPrice(row.price)} onClick={handleChangePrice}/> 
-              </TableCell>
-              <TableCell align="left">
-                <input className='item__price stock' type="text" value={row.amount} onClick={handleChangePrice}/>
-              </TableCell>
-              <TableCell align="left">
-                <a href="" className='text-wrap-1 link'>{row.vendor}</a>
-              </TableCell>
-              <TableCell align="left" sx={{width: '114px'}}>{handleConvertDate(row.arrivalDate)}</TableCell>
-              <TableCell align="left">
-                <div>
-                  <button className='custom-button'>
-                    <DeleteIcon />
-                  </button>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+          {data ? data?.map((row) => (
+            <ProductItem key={row.id} data={row} allStatus={allCheckboxStatus} onRefreshData={handleRefreshTable}/>
+          )) : ''}
         </TableBody>
       </Table>
     </TableContainer>

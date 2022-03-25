@@ -1,5 +1,6 @@
 import { ActionType, createCustomAction, getType } from 'typesafe-actions';
 import { IProduct } from '../models/productModal';
+import { ISellerDelete } from '../models/userModals';
 
 const initState = {
     filterProducts:{
@@ -10,6 +11,7 @@ const initState = {
         searchType: [],
     },
     productList: [],
+    deleteProducts: []
 }
 
 export interface IFilterProduct{
@@ -23,6 +25,7 @@ export interface IFilterProduct{
 export interface IProductList{
     filterProducts: IFilterProduct,
     productList: Array<IProduct>,
+    deleteProducts: Array<ISellerDelete>
 }
 
 export const setInitListProducts = createCustomAction('product/setInitListProducts', (data:Array<IProduct>) => ({
@@ -33,7 +36,11 @@ export const filterProducts = createCustomAction('product/filterProducts', (data
     data,
 }));
 
-const actions = { setInitListProducts, filterProducts};
+export const setDeleteProducts = createCustomAction('product/setDeleteProducts', (data:Array<ISellerDelete> | undefined) => ({
+    data,
+}));
+
+const actions = { setInitListProducts, filterProducts, setDeleteProducts};
 
 type Action = ActionType<typeof actions>;
 
@@ -43,6 +50,8 @@ export default function reducerProduct(state: IProductList = initState , action:
             return {...state, productList: action.data}
         case getType(filterProducts):
             return {...state, filterProducts: action.data};
+        case getType(setDeleteProducts):
+            return {...state, deleteProducts: action.data};
         default:
           return state;
     }

@@ -11,6 +11,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../../redux/reducer';
 import { Action } from 'redux';
 import { setDeleteVendors } from '../redux/vendor';
+import '../scss/home.scss';
 
 interface Props{
     data: ISeller,
@@ -22,6 +23,7 @@ function UserItem(props: Props) {
     const listDeletes = useSelector(listDeleteVendors);
     const { data, allStatus } = props;
     const [checkboxStatus, setCheckboxStatus] = React.useState(false);
+    
     const handleConvertDate = (dateString: string)=>{
         const dateConverted = moment(Number.parseInt(dateString) * 1000).format('lll');
         return dateConverted;
@@ -48,7 +50,7 @@ function UserItem(props: Props) {
     // console.log(listDeletes);
 
   return (
-    <TableRow key={data.profile_id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+    <TableRow key={data.profile_id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} className={checkboxStatus ? "opc-05" : ""}>
       <TableCell component="th" scope="row">
         <input
           checked={allStatus ? allStatus && checkboxStatus : checkboxStatus}
@@ -79,7 +81,7 @@ function UserItem(props: Props) {
       </TableCell>
       <TableCell align="left">
         <div>
-          <button className="custom-button">
+          <button className="custom-button" onClick={handlChangeCheckboxStatus}>
             <DeleteIcon />
           </button>
         </div>

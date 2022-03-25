@@ -14,12 +14,12 @@ import { Action } from 'redux';
 import { fetchThunk } from '../../common/redux/thunk';
 import { IListProduct, IProduct } from '../models/productModal';
 import { styled, makeStyles } from '@mui/styles'
-import { filterProducts, setInitListProducts } from '../redux/product';
-import { filterProductSearchSelector, filterProductSCSSelector, filterProductSCSSSelector } from '../redux/selector';
+import { filterProducts, setDeleteProducts, setInitListProducts } from '../redux/product';
+import { filterProductSearchSelector, filterProductSCSSelector, filterProductSCSSSelector, listDeleteProducts } from '../redux/selector';
 import CheckBox from '../common/CheckBox';
 import LoadingModal from '../common/LoadingModal';
 import { ACCESS_TOKEN_KEY } from '../../../utils/constants';
-import { IListVendors, IVendor } from '../models/vendorModals';
+import { IVendor } from '../models/vendorModals';
 import Button from '@mui/material/Button';
 
 const usePaginationStyles = makeStyles({
@@ -36,6 +36,7 @@ const usePaginationStyles = makeStyles({
 
 function ListProductForm() {
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
+  const listDeletes = useSelector(listDeleteProducts);
 
   const [listNumberItemPerPage,setListNumberItemPerPage] = React.useState([10,25,50,75,100]);
   const [selectedPage,setSelectedPage] = React.useState(false);
@@ -79,12 +80,16 @@ function ListProductForm() {
     setPagination(e.target.value);
   }
 
+  
+
   const getListProduct = useCallback(async()=>{
+    setLoading(true);
     const json = await dispatch(
       fetchThunk(`https://api.gearfocus.div4.pgtest.co/api/products/list`, 'get'),
     );
     setListProduct(json.data);
     dispatch(setInitListProducts(json.data));
+    setLoading(false);
   },[dispatch]);
 
   const getListCategories = useCallback(async()=>{
@@ -101,12 +106,18 @@ function ListProductForm() {
     setListVendors(json.data);
   },[dispatch]);
 
-  useEffect(()=>{
+  const deleteVendors = useCallback(async()=>{
     setLoading(true)
+    const json = await dispatch(fetchThunk('https://api.gearfocus.div4.pgtest.co/apiAdmin/products/edit','post', {params: listDeletes}));
+    getListProduct();
+    setPage(1)
+    setLoading(false)
+  },[listDeletes])
+
+  useEffect(()=>{
     getListProduct();
     getListCategories();
     getListVendors();
-    setLoading(false)
   },[getListProduct,getListCategories,getListVendors]);
 
   const handleChangeFilterSelect = (type: string, value: string)=>{
@@ -136,6 +147,12 @@ function ListProductForm() {
       setFilters({...filters, searchType: [...filters.searchType.filter(item=>(item!=type))]})
     }
   }
+
+  const handleRemoveSelectedProducts = ()=>{
+    deleteVendors();
+    dispatch(setDeleteProducts([]));
+  }
+  console.log(listDeletes)
   
   const classes = usePaginationStyles();
   return (
@@ -146,9 +163,9 @@ function ListProductForm() {
       </div>
       
       <div className="row filters-wrap">
-        <div className='col-6'>
+        {/* <div className='col-6'>
           <InputText text="Search keywords" data={[]} name='search' onChangeFilterInput={handleChangeFilterInput}/>
-        </div>
+        </div> */}
         <div className="col-3">
           <SelectBox text="category" data={listCategories} onChangeFilters={handleChangeFilterSelect}/>
         </div>
@@ -179,10 +196,10 @@ function ListProductForm() {
           <label htmlFor="#">Availability</label>
           <SelectBox text="status" data={listAvailable} onChangeFilters={handleChangeFilterSelect}/>
         </div>
-        <div className="col-4 filters__item">
+        {/* <div className="col-4 filters__item">
           <label htmlFor="#">Vendor</label>
           <InputText text="Vendor" data={listVendors} name='vendor' onChangeFilterInput={handleChangeFilterInput}/>
-        </div>
+        </div> */}
       </div>
 
       <div className="row">
@@ -190,7 +207,7 @@ function ListProductForm() {
       </div>
 
       <div className="row list-products">
-        <BasicTable data={storeProductData?.slice(page * pagination - pagination, page * pagination)}/>
+        {/* <BasicTable data={storeProductData?.slice(page * pagination - pagination, page * pagination)}/> */}
         <div className='pagination'>
           <Stack spacing={2}>
             <Pagination className={classes.root} count={Math.ceil(storeProductData?.length / pagination)} page={page} color="secondary" onChange={ handleChangePage } defaultPage={1} />
@@ -213,7 +230,7 @@ function ListProductForm() {
         <Button className="rdbtn rdbtn--orange me-3" variant="contained">
           Save changes
         </Button>
-        <Button className="rdbtn rdbtn--orange me-3" variant="contained">
+        <Button className="rdbtn rdbtn--orange me-3" variant="contained" onClick={handleRemoveSelectedProducts}>
           Remove selected
         </Button>
         <Button className="rdbtn rdbtn--orange" variant="contained">

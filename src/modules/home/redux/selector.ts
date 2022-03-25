@@ -9,6 +9,7 @@ export const productListSelector = (state:AppState) => state.product.productList
 export const productFilters = (state:AppState) => state.product.filterProducts;
 
 export const listDeleteVendors = (state:AppState) => state.vendor.deleteVendors;
+export const listDeleteProducts = (state:AppState) => state.product.deleteProducts;
 
 export const filterProductSearchSelector = createSelector(productListSelector,productFilters,(productList,filters)=>{
     return(productList.filter((item:IProduct) => {

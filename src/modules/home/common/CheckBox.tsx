@@ -26,8 +26,7 @@ function CheckBox(props: Props) {
     }
   return (
     <>
-        <input type="checkbox" name={`search-${convertType()}`} id={`search-${convertType()}`} checked={checkStatus} onChange={handleChangeFilterSearch}/>
-        <label htmlFor={`search-${convertType()}`}>{type}</label>
+        
     </>
   )
 }

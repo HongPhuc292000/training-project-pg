@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../components/Header';
-import ListProductForm from '../components/ListProductForm';
+import ListProductForm1 from '../components/ListProductForm1';
 import Sidebar from '../components/Sidebar';
 import '../scss/home.scss';
 
@@ -11,7 +11,7 @@ function ListProductManagement() {
       <div className='container-fluid main-wrap'>
         <div className='main-container row justify-content-end'>
           <Sidebar />
-          <ListProductForm />
+          <ListProductForm1 />
         </div>
       </div>
     </>

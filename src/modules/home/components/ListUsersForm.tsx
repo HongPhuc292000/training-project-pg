@@ -39,12 +39,12 @@ function ListUsersForm() {
   const [listNumberItemPerPage,setListNumberItemPerPage] = React.useState([10,25,50,75,100]);
   const [selectedPage,setSelectedPage] = React.useState(false);
   const [selectedCountry, setSelectedCountry] = React.useState('all');
-  const [checkedAll, setCheckedAll] = React.useState(false)
   const [listVendors, setListVendors] = React.useState<Array<ISeller> | undefined>();
   const [listCountry, setListCountry] = React.useState<Array<ICountry> | undefined>();
   const [listState, setListState] = React.useState<Array<IState> | undefined>();
   const [listRole, setListRole] = React.useState<Array<IRole> | undefined>();
   const [filterRecordTotal, setFilterRecordTotal] = React.useState(0);
+  const [showModal, setShowModal] = React.useState(false);
   const [listStatus, setListStatus] = React.useState([
     {
       value: "all",
@@ -233,11 +233,20 @@ function ListUsersForm() {
   }
 
   const handleRemoveSelectedUsers = ()=>{
-    deleteVendors();
-    dispatch(setDeleteVendors([]));
+    setShowModal(true);
   }
 
-  console.log(listDeletes);
+  const handleAcceptUpdateProduct = (e:any)=>{
+    if(e.target.innerText === 'YES'){
+      deleteVendors();
+      dispatch(setDeleteVendors([]));
+      setShowModal(false);
+    }else{
+      setShowModal(false);
+    }
+  }
+
+  // console.log(listDeletes);
   
 
   const classes = usePaginationStyles();
@@ -388,10 +397,24 @@ function ListUsersForm() {
         
       </div>
       <div className='fixed-action'>
-        <Button className="rdbtn rdbtn--orange" variant="contained" onClick={handleRemoveSelectedUsers}>
+        <Button disabled={listDeletes.length > 0 ? false : true} className="rdbtn rdbtn--orange" variant="contained" onClick={handleRemoveSelectedUsers}>
           Remove selected
         </Button>
       </div>
+      {
+        showModal ? (
+            <div className='modal__acp-wrap'>
+                <div className='modal__acp-content'>
+                    <p className='modal__acp-item'>Confirm Update</p>
+                    <p className='modal__acp-item'>Do you want to update this product?</p>
+                    <div className='modal__acp-item'>
+                        <button className='custom-button accept md-btn' onClick={handleAcceptUpdateProduct}>Yes</button>
+                        <button className='custom-button error md-btn' onClick={handleAcceptUpdateProduct}>No</button>
+                    </div>
+                </div>
+            </div>
+        ) : ''
+      }
 
       {loading ?<LoadingModal/>:''}
     </div>
