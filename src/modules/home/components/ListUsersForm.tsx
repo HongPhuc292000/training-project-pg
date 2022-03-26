@@ -176,9 +176,9 @@ function ListUsersForm() {
 
   const handleChangeSelectRole = (e:any)=>{
     if(e.target.value == 'all'){
-      setFilterTemp({...filterTemp,  memberships: []});
+      setFilterTemp({...filterTemp,  types: []});
     }else{
-      setFilterTemp({...filterTemp, memberships: [...filterTemp.memberships, e.target.value]});
+      setFilterTemp({...filterTemp, types: [...filterTemp.types, e.target.value]});
     }
   }
 
@@ -236,7 +236,7 @@ function ListUsersForm() {
     setShowModal(true);
   }
 
-  const handleAcceptUpdateProduct = (e:any)=>{
+  const handleAcceptUpdateUsers = (e:any)=>{
     if(e.target.innerText === 'YES'){
       deleteVendors();
       dispatch(setDeleteVendors([]));
@@ -245,9 +245,6 @@ function ListUsersForm() {
       setShowModal(false);
     }
   }
-
-  // console.log(listDeletes);
-  
 
   const classes = usePaginationStyles();
   return (
@@ -408,8 +405,8 @@ function ListUsersForm() {
                     <p className='modal__acp-item'>Confirm Update</p>
                     <p className='modal__acp-item'>Do you want to update this product?</p>
                     <div className='modal__acp-item'>
-                        <button className='custom-button accept md-btn' onClick={handleAcceptUpdateProduct}>Yes</button>
-                        <button className='custom-button error md-btn' onClick={handleAcceptUpdateProduct}>No</button>
+                        <button className='custom-button accept md-btn' onClick={handleAcceptUpdateUsers}>Yes</button>
+                        <button className='custom-button error md-btn' onClick={handleAcceptUpdateUsers}>No</button>
                     </div>
                 </div>
             </div>

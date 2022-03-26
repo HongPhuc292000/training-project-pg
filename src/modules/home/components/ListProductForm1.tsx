@@ -49,6 +49,7 @@ function ListProductsForm() {
   const [pagination, setPagination] = React.useState(25);
   const [listStock, setListStock] = React.useState([{name: 'Any stock status',value: 'all'},{name: 'In stock',value: 'in'},{name: 'Low stock',value: 'low'}, {name: 'SOLD',value: 'out'}]);
   const [listSearchType, setListSearchType] = React.useState<Array<string>>([]);
+  const [showModal, setShowModal] = React.useState(false);
   const [listAvailable, setListAvailable] = React.useState([
     {
       name: 'Any availability status',
@@ -177,8 +178,17 @@ function ListProductsForm() {
   }
 
   const handleDeleteProducts = ()=>{
-    deleteProducts()
-    dispatch(setDeleteProducts([]));
+    setShowModal(true);
+  }
+
+  const handleAcceptUpdateProducts = (e:any)=>{
+    if(e.target.innerText === 'YES'){
+      deleteProducts();
+      dispatch(setDeleteProducts([]));
+      setShowModal(false);
+    }else{
+      setShowModal(false);
+    }
   }
 
   const handleRefreshData = ()=>{
@@ -292,6 +302,20 @@ function ListProductsForm() {
           Export all: CSV
         </Button>
       </div>
+      {
+        showModal ? (
+            <div className='modal__acp-wrap'>
+                <div className='modal__acp-content'>
+                    <p className='modal__acp-item'>Confirm Update</p>
+                    <p className='modal__acp-item'>Do you want to update this product?</p>
+                    <div className='modal__acp-item'>
+                        <button className='custom-button accept md-btn' onClick={handleAcceptUpdateProducts}>Yes</button>
+                        <button className='custom-button error md-btn' onClick={handleAcceptUpdateProducts}>No</button>
+                    </div>
+                </div>
+            </div>
+        ) : ''
+      }
 
       {loading ?<LoadingModal/>:''}
     </div>

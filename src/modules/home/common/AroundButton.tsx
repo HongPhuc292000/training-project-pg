@@ -10,7 +10,7 @@ interface Props{
 function AroundButton(props: Props) {
     const { linkto } = props;
   return (
-    <button className='around-btn'>
+    <button className='around-btn mb-2'>
         <Link to={linkto}><ArrowBackIcon /></Link>
     </button>
   )

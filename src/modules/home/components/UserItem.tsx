@@ -25,8 +25,8 @@ function UserItem(props: Props) {
     const [checkboxStatus, setCheckboxStatus] = React.useState(false);
     
     const handleConvertDate = (dateString: string)=>{
-        const dateConverted = moment(Number.parseInt(dateString) * 1000).format('lll');
-        return dateConverted;
+      const dateConverted = moment(Number.parseInt(dateString) * 1000).format('lll');
+      return dateConverted;
     }
     const handlChangeCheckboxStatus = ()=>{
       setCheckboxStatus(!checkboxStatus)
