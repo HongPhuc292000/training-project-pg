@@ -10,7 +10,6 @@ import { Action } from 'redux';
 import { fetchThunk } from '../../common/redux/thunk';
 import { styled, makeStyles } from '@mui/styles'
 import { filterProducts, setInitListProducts } from '../redux/product';
-import CheckBox from '../common/CheckBox';
 import LoadingModal from '../common/LoadingModal';
 import { ISeller } from '../models/userModals';
 import TableUser from './TableUser';
