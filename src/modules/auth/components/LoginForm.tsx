@@ -20,13 +20,10 @@ const LoginForm = (props: Props) => {
 
   const onSubmit = React.useCallback(() => {
     const validate = validateLogin(formValues);
-
     setValidate(validate);
-
     if (!validLogin(validate)) {
       return;
     }
-
     onLogin(formValues);
   }, [formValues, onLogin]);
 

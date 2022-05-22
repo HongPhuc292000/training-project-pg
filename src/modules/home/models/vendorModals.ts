@@ -4,9 +4,9 @@ export interface IVendor{
 }
 
 export interface IListVendors{
-    data: Array<IVendor>,
-    errors: boolean,
-    recordsTotal: number,
-    success: boolean,
-    user: object
+  data: Array<IVendor>,
+  errors: boolean,
+  recordsTotal: number,
+  success: boolean,
+  user: object
 }

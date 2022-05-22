@@ -4,7 +4,6 @@ import { AppState } from "../../../redux/reducer";
 import { IProduct } from "../models/productModal";
 
 //Product Selector
-
 export const productListSelector = (state:AppState) => state.product.productList;
 export const productFilters = (state:AppState) => state.product.filterProducts;
 

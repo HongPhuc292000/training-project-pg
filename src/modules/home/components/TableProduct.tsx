@@ -10,7 +10,7 @@ import { makeStyles } from '@mui/styles'
 import { IProduct } from '../models/productModal';
 import ProductItem from './ProductItem';
 import { ISellerDelete } from '../models/userModals';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../../redux/reducer';
 import { Action } from 'redux';

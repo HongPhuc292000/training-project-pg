@@ -21,3 +21,4 @@ export const API_PATHS = {
   signIn: `${getBaseUrl(APIService.api)}/authentication/login`,
   userProfile: `${getBaseUrl(APIService.apiVendor)}/user`,
 };
+

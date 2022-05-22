@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -24,4 +24,4 @@ function Header() {
   )
 }
 
-export default Header
+export default memo(Header)

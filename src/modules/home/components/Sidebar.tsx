@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import LanguageIcon from '@mui/icons-material/Language';
 import GroupIcon from '@mui/icons-material/Group';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
@@ -48,4 +48,4 @@ function Sidebar() {
   )
 }
 
-export default Sidebar
+export default memo(Sidebar)

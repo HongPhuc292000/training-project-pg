@@ -10,17 +10,13 @@ import { fetchThunk } from '../../common/redux/thunk';
 import { makeStyles } from '@mui/styles'
 import { setDeleteProducts } from '../redux/product';
 import LoadingModal from '../common/LoadingModal';
-import { ISeller } from '../models/userModals';
-import TableUser from './TableUser';
 import Button from '@mui/material/Button';
-import { ICountry, IRole, IState } from '../models/countryModal';
-import { formatDate } from '../common/FormatData';
-import { listDeleteProducts, listDeleteVendors } from '../redux/selector';
-import { setDeleteVendors } from '../redux/vendor';
+import { listDeleteProducts } from '../redux/selector';
 import BasicTable from './TableProduct';
 import { ICategory, IProduct } from '../models/productModal';
 import InputText from '../common/InputText';
 import { IVendor } from '../models/vendorModals';
+import SelectBox from '../../common/components/SelectBox';
 
 const usePaginationStyles = makeStyles({
   root: {

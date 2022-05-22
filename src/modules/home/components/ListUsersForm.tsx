@@ -1,5 +1,4 @@
 import React,{useCallback, useEffect} from 'react'
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import '../scss/home.scss';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -8,8 +7,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../../redux/reducer';
 import { Action } from 'redux';
 import { fetchThunk } from '../../common/redux/thunk';
-import { styled, makeStyles } from '@mui/styles'
-import { filterProducts, setInitListProducts } from '../redux/product';
+import { makeStyles } from '@mui/styles'
 import LoadingModal from '../common/LoadingModal';
 import { ISeller } from '../models/userModals';
 import TableUser from './TableUser';

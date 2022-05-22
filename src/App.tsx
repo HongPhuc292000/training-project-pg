@@ -11,17 +11,17 @@ import { fetchThunk } from './modules/common/redux/thunk';
 import { API_PATHS } from './configs/api';
 import { RESPONSE_STATUS_SUCCESS } from './utils/httpResponseCode';
 import { setUserInfo } from './modules/auth/redux/authReducer';
-import Header from './modules/home/components/Header';
 
 function App() {
   const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
   const { user } = useSelector((state: AppState) => ({
     user: state.profile.user,
   }));
-
+  
   const getProfile = React.useCallback(async () => {
     const accessToken = Cookies.get(ACCESS_TOKEN_KEY);
-
+    console.log(accessToken);
+    
     if (accessToken && !user) {
       const json = await dispatch(fetchThunk(API_PATHS.userProfile));
       if (json?.code === RESPONSE_STATUS_SUCCESS) {

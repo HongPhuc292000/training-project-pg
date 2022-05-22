@@ -42,7 +42,6 @@ const LoginPage = () => {
     [dispatch],
   );
 
-
   return (
     <div
       className="container login-page-wrap"
